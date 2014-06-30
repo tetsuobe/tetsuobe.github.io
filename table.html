@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="css/ng-table.min.css">
+    <link rel="stylesheet" href="css/main.min.css">
+
+    <title>Karaoke App</title>
+</head>
+<body>
+
+    <div class="container main-frame" ng-app="KaraokeApp" ng-controller="mainController" ng-init="init()">
+        <nav class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">KARAOKE <small><span class="label label-info">{{tableParams.total()}}</span></small></a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <form class="navbar-form navbar-right" role="search">
+                    <div class="form-group">
+                        <label>Language: </label>
+                        <select ng-model="langFilter" ng-options="label for label in availableLangs">
+                            <option value="">All</option>
+                        </select>
+                    </div>
+                </form>
+            </div><!-- /.navbar-collapse -->
+        </nav>
+        <table ng-table="tableParams" show-filter="true" class="table ng-table-responsive">
+            <tbody ng-repeat="group in $groups">
+            <tr class="ng-table-group">
+                <td colspan="{{$columns.length}}">
+                    <a href="" ng-click="group.$hideRows = !group.$hideRows">
+                        <span class="glyphicon" ng-class="{ 'glyphicon-chevron-right': group.$hideRows, 'glyphicon-chevron-down': !group.$hideRows }"></span>
+                        <strong>{{ group.value }}</strong>
+                    </a>
+                </td>
+            </tr>
+            <tr ng-hide="group.$hideRows" ng-repeat="songs in group.data">
+                <td data-title="'Singer'" filter="{ 'singer': 'text' }">
+                    {{songs.singer}}
+                </td>
+                <td data-title="'Title'" filter="{ 'title': 'text' }">
+                    {{songs.title}}
+                </td>
+                <td data-title="'Lang'">
+                    {{songs.lang}}
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+    </div>
+    <script type="text/javascript" src="js/angular.js"></script>
+    <script type="text/javascript" src="js/karaoke-app/app.js"></script>
+    <script type="text/javascript" src="js/karaoke-app/controllers/mainController.js"></script>
+    <script type="text/javascript" src="js/modules/ng-table.js"></script>
+</body>
+</html>
