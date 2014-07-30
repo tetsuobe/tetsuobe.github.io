@@ -9,53 +9,58 @@
     <title>Karaoke App</title>
 </head>
 <body>
-    <div class='banner'>
-        <div class='container'>
-            <h1>List</h1>
-        </div>
-    </div>
-    <div class="container main-frame" ng-app="KaraokeApp" ng-controller="mainController" ng-init="init()">
-        <div class="search-box row-fluid form-inline">
-            <label>Filter: </label>
-            <input type="text" ng-model="filterText"/>
-            <label>Language: </label>
-            <select ng-model="langFilter" ng-options="label for label in availableLangs">
-                <option value="">All</option>
-            </select>
-        </div>
-        <div class="results-top"></div>
-        <div class="results-container">
-            <ul class="episode-list">
-                <li ng-repeat="songs in results | songSearch:filterText | isLang: langFilter">
-                    {{songs.singer}} - {{songs.title}} <span class="label" ng-class="{'label-default': songs.lang != 'en', 'label-success': songs.lang == 'en'}">[{{songs.lang}}]</span>
-                </li>
-            </ul>
-        </div>
-        <div class="results-bottom"></div>
 
-        <div class="center">
-            <div class="pagination">
-                <ul>
-                    <li ng-class="{disabled: currentPage == 0}">
-                        <a href ng-click="prevPage()">« Prev</a>
-                    </li>
-                    <li ng-repeat="n in range(pagedProjects.length)"
-                        ng-class="{active: n == currentPage}"
-                        ng-click="setPage()">
-                        <a href ng-bind="n + 1">1</a>
-                    </li>
-                    <li ng-class="{disabled: currentPage == pagedProjects.length - 1}">
-                        <a href ng-click="nextPage()">Next »</a>
-                    </li>
-                </ul>
-            </div>
+<div class="container main-frame" ng-app="KaraokeApp" ng-controller="mainController" ng-init="init()">
+    <nav class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#">KARAOKE
+                <small><span class="label label-info">{{tableParams.total()}}</span></small>
+            </a>
         </div>
 
-    </div>
-    <script type="text/javascript" src="js/angular.js"></script>
-    <!-- INCLUDE APPLICATION SPECIFIC CSS AND JAVASCRIPT -->
-    <script type="text/javascript" src="js/karaoke-app/app.js"></script>
-    <script type="text/javascript" src="js/karaoke-app/controllers/mainController.js"></script>
-    <script type="text/javascript" src="js/modules/ng-table.js"></script>
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <form class="navbar-form navbar-right" role="search">
+                <div class="form-group">
+                    <label for="selAvailableLangs">Language: </label>
+                    <select ng-model="langFilter" ng-options="label for label in availableLangs" id="selAvailableLangs">
+                        <option value="">All</option>
+                    </select>
+                </div>
+            </form>
+        </div>
+        <!-- /.navbar-collapse -->
+    </nav>
+    <table ng-table="tableParams" show-filter="true" class="table ng-table-responsive">
+        <tbody ng-repeat="group in $groups">
+        <tr class="ng-table-group">
+            <td colspan="{{$columns.length}}">
+                <a href="" ng-click="group.$hideRows = !group.$hideRows">
+                    <span class="glyphicon"
+                          ng-class="{ 'glyphicon-chevron-right': group.$hideRows, 'glyphicon-chevron-down': !group.$hideRows }"></span>
+                    <strong>{{ group.value }}</strong>
+                </a>
+            </td>
+        </tr>
+        <tr ng-hide="group.$hideRows" ng-repeat="songs in group.data">
+            <td data-title="'Singer'" filter="{ 'singer': 'text' }">
+                {{songs.singer}}
+            </td>
+            <td data-title="'Title'" filter="{ 'title': 'text' }">
+                {{songs.title}}
+            </td>
+            <td data-title="'Lang'">
+                {{songs.lang}}
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+<script type="text/javascript" src="js/angular.js"></script>
+<script type="text/javascript" src="js/karaoke-app/app.js"></script>
+<script type="text/javascript" src="js/karaoke-app/controllers/mainController.js"></script>
+<script type="text/javascript" src="js/modules/ng-table.js"></script>
 </body>
 </html>
